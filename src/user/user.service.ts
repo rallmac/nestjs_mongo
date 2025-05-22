@@ -17,19 +17,31 @@ export class UserService {
         return this.userRepository.findOneBy({ username });
     }
 
-    async create(username: string, password: string): Promise<User> {
-        const hashed = await bcrypt.hash(password, 10);
-        const newUser = this.userRepository.create({ username, password: hashed });
+    async findAll(): Promise<User[]> {
+        return this.userRepository.find();
+    }
+
+    async findByUsername(username: string): Promise<User | null> {
+        return this.userRepository.findOneBy({ username });
+    }
+
+    async createUser(createUserDto: { username: string; password: string }): Promise<User> {
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
+        const newUser = this.userRepository.create({ ...createUserDto, password: hashedPassword });
         return this.userRepository.save(newUser);
     }
 
 
     async validateUser(username: string, plainPassword: string): Promise<any> {
+        console.log('Validating user:', username);
         const user = await this.findOne(username);
+        console.log('User found:', user);
         if (user && await bcrypt.compare(plainPassword, user.password)) {
             const { password, ...result } = user;
             return result;
         }
+        console.log('Invalid credentials');
         return null;
     }
 }
