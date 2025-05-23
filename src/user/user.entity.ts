@@ -13,4 +13,14 @@ export class User {
 
     @Column()
     password: string;
+
+    @Column({ default: false })
+    isEmailConfirmed: boolean;
+    confirmationToken?: string;
+
+    @Column({ nullable: true })
+    resetPasswordToken?: string;
+
+    @Column({ nullable: true })
+    resetPasswordExpires?: Date;
 }
