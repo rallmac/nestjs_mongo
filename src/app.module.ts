@@ -13,6 +13,7 @@ import { AppService } from './app.service';
       database: 'mongodb',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
+      
     }),
     UserModule,
     AuthModule,
