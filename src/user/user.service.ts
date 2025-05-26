@@ -90,7 +90,7 @@ export class UserService {
             },
         });
 
-        const resetUrl = `http://localhost:3000/users/reset-password?token=${token}`;
+        const resetUrl = `${process.env.CLIENT_BASE_URL}/users/reset-password?token=${token}`;
         await transporter.sendMail({
             to: user.isEmailConfirmed,
             subject: 'Password Reset',
