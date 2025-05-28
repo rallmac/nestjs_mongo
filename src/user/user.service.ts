@@ -27,12 +27,20 @@ export class UserService {
         return this.userRepository.findOneBy({ username });
     }
 
-    async createUser(createUserDto: { username: string; password: string; email: string }): Promise<User> {
+    async createUser(createUserDto: { email: string; password: string }): Promise<User> {
+        const existing = await this.userRepository.findOneBy({ email: createUserDto.email });
+        if (existing) {
+            throw new Error('Email already registered');
+        }
         const confirmationToken = uuidv4();
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
         const newUser = this.userRepository.create({ ...createUserDto, password: hashedPassword, isEmailConfirmed: false, confirmationToken, });
         return this.userRepository.save(newUser);
+    }
+
+    async findByEmail(email: string): Promise<User | null> {
+        return this.userRepository.findOneBy({ email });
     }
 
 

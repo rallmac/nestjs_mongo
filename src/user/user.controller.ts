@@ -13,6 +13,11 @@ export class UserController {
         return this.userService.createUser(createUserDto);
     }
 
+    @Get('email')
+    async findByEmail(@Param('email') email: string): Promise<User | null> {
+        return this.userService.findByEmail(email);
+    }
+
     @Get()
     async findAll() {
         return this.userService.findAll();

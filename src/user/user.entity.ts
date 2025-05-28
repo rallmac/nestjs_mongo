@@ -14,6 +14,9 @@ export class User {
     @Column()
     password: string;
 
+    @Column({ unique: true, nullable: false })
+    email: string;
+
     @Column({ default: false })
     isEmailConfirmed: boolean;
     confirmationToken?: string;
